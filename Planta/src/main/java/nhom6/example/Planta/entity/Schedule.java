@@ -45,4 +45,6 @@ public class Schedule {
 	@JoinColumn(name = "idplant")
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
 	private Plant plant;
+	
+	
 }

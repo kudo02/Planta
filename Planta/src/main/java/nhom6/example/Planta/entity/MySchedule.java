@@ -1,6 +1,7 @@
 package nhom6.example.Planta.entity;
 
 import java.sql.Date;
+import java.sql.Time;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -13,12 +14,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -33,17 +30,14 @@ public class MySchedule {
 	@Column(name = "name")
 	private String name;
 	
-	@Column(name = "createdate")
-	private Date createDate;
+	@Column(name = "startdate")
+	private Date startDate;
 	
-	@Column(name = "updatedate")
-	private Date updateDate;
+	@Column(name = "enddate")
+	private Date endDate;
 	
 	@Column(name = "time")
-	private Date time;
-	
-	@Column(name = "duration")
-	private int duration;
+	private Time time;
 	
 	@Column(name = "frequency")
 	private int frequency;
@@ -51,4 +45,29 @@ public class MySchedule {
 	@JoinColumn(name = "idmyplant")
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
 	private MyPlant myPlant;
+
+	public int getId() {
+		return id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public Time getTime() {
+		return time;
+	}
+
+	public int getFrequency() {
+		return frequency;
+	}
+	
 }

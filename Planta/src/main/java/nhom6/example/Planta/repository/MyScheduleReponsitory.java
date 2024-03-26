@@ -1,6 +1,7 @@
-package nhom6.example.Planta.respository;
+package nhom6.example.Planta.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -10,8 +11,12 @@ import org.springframework.stereotype.Repository;
 import nhom6.example.Planta.entity.MySchedule;
 
 @Repository
-public interface MyScheduleResponsitory extends JpaRepository<MySchedule, Integer> {
+public interface MyScheduleReponsitory extends JpaRepository<MySchedule, Integer> {
 	
 	@Query("SELECT ms FROM MySchedule ms JOIN ms.myPlant mp JOIN mp.user u WHERE u.id = :userId")
-    List<MySchedule> findByUserId(@Param("userId") int userId);
+	Optional<List<MySchedule>> findByUserId(@Param("userId") int userId);
+	
+	@Query("SELECT ms FROM MySchedule ms JOIN ms.myPlant mp WHERE mp.id = :myplantId")
+	Optional<List<MySchedule>> findByMyPlantId(@Param("myplantId") int myplantId);
+	
 }

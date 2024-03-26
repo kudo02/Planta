@@ -1,16 +1,15 @@
-package nhom6.example.Planta.payload;
+package nhom6.example.Planta.payload.response;
 
-public class PlantRequest {
+public class PlantResponse {
 	private int id;
 	private String name;
 	private String typePlant;
 	private String mainImage;
 	
-	public PlantRequest() {
+	public PlantResponse() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
-	public PlantRequest(int id, String name, String typePlant, String mainImage) {
+	public PlantResponse(int id, String name, String typePlant, String mainImage) {
 		super();
 		this.id = id;
 		this.name = name;

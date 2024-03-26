@@ -7,5 +7,7 @@ import nhom6.example.Planta.entity.MySchedule;
 public interface MyScheduleService {
 	
 	public List<MySchedule> getListMyScheduleByIdUser(int id);
+	
+	public List<MySchedule> getListMyScheduleByIdMyPlant(int id);
 
 }

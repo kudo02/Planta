@@ -3,6 +3,7 @@ package nhom6.example.Planta.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +13,7 @@ import nhom6.example.Planta.entity.MyPlant;
 import nhom6.example.Planta.entity.User;
 import nhom6.example.Planta.service.MyPlantService;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/my_plant")
 public class MyPlantController {
@@ -22,6 +24,7 @@ public class MyPlantController {
 	@GetMapping("/all")
 	public List<MyPlant> getAllMyPlantByUser(@RequestBody User user){
 		List<MyPlant> myPlants = myPlantService.getAllMyPlantByUser(user);
+
 		return myPlants;
 	}
 }

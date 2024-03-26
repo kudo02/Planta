@@ -6,25 +6,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import nhom6.example.Planta.entity.Plant;
-import nhom6.example.Planta.payload.PlantRequest;
-import nhom6.example.Planta.respository.PlantRespository;
+import nhom6.example.Planta.payload.response.PlantResponse;
+import nhom6.example.Planta.repository.PlantRepository;
 import nhom6.example.Planta.service.PlantService;
 
 @Service
 public class PlantServiceImpl implements PlantService {
 
 	@Autowired
-	private PlantRespository plantRespository;
+	private PlantRepository plantRepository;
 	
 	@Override
 	public Plant getPlantDetail(int id) {
 
-		return plantRespository.findById(id).orElse(null);
+		return plantRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("Not found"));
 	}
 	
 	@Override
-	public List<PlantRequest> getListPlants() {
-	
-		return plantRespository.findAllProjected();
+	public List<PlantResponse> getListPlants() {
+		return plantRepository.findAllProjected();
 	}
 }

@@ -1,33 +1,19 @@
 package nhom6.example.Planta.payload.response;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class PlantResponse {
+	
 	private int id;
 	private String name;
 	private String typePlant;
 	private String mainImage;
-	
-	public PlantResponse() {
-		super();
-	}
-	public PlantResponse(int id, String name, String typePlant, String mainImage) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.typePlant = typePlant;
-		this.mainImage = mainImage;
-	}
-	public int getId() {
-		return id;
-	}
-	public String getName() {
-		return name;
-	}
-	public String getTypePlant() {
-		return typePlant;
-	}
-	public String getMainImage() {
-		return mainImage;
-	}
-	
 	
 }

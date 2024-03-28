@@ -1,23 +1,14 @@
 package nhom6.example.Planta.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import nhom6.example.Planta.entity.User;
-import nhom6.example.Planta.repository.UserRepository;
+import nhom6.example.Planta.payload.response.UserResponse;
 
-@Service
-public class UserService{
-
-	@Autowired
-	private UserRepository userRepository;
+public interface UserService{
 	
-	public User loginUser(User user) {
-		return userRepository.findByUsernameAndPassword(user.getUsername(), user.getPassword());
-	}
-	
-	public User registerUser(User user) {
-		return userRepository.save(user);
-	}
-	
+	public UserResponse getUserByToken(String token);
+	public UserResponse login(User user);
+	public int register(User user);
+	public int updateUser(User user);
+	public int updateUserToken(User user);
+	public int updateUserPassword(User user);
 }

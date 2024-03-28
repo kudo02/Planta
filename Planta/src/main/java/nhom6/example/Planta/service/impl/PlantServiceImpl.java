@@ -18,7 +18,6 @@ public class PlantServiceImpl implements PlantService {
 	
 	@Override
 	public Plant getPlantDetail(int id) {
-
 		return plantRepository.findById(id)
 				.orElseThrow(() -> new RuntimeException("Not found"));
 	}

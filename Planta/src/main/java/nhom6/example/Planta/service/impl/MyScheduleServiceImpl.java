@@ -9,14 +9,14 @@ import nhom6.example.Planta.entity.MyPlant;
 import nhom6.example.Planta.entity.MySchedule;
 import nhom6.example.Planta.payload.request.MyScheduleRequest;
 import nhom6.example.Planta.repository.MyPlantRepository;
-import nhom6.example.Planta.repository.MyScheduleReponsitory;
+import nhom6.example.Planta.repository.MyScheduleRepository;
 import nhom6.example.Planta.service.MyScheduleService;
 
 @Service
 public class MyScheduleServiceImpl implements MyScheduleService {
 	
 	@Autowired
-	private MyScheduleReponsitory myScheduleReponsitory;
+	private MyScheduleRepository myScheduleRepository;
 	
 	@Autowired
 	private MyPlantRepository myPlantRepository;
@@ -32,7 +32,7 @@ public class MyScheduleServiceImpl implements MyScheduleService {
 		mySchedule.setFrequency(request.getFrequency());
 		mySchedule.setMyPlant(getMyPlant(request.getMyPlantId()));
 		
-		return myScheduleReponsitory.save(mySchedule);
+		return myScheduleRepository.save(mySchedule);
 	}
 	
 	@Override
@@ -45,37 +45,35 @@ public class MyScheduleServiceImpl implements MyScheduleService {
 		mySchedule.setTime(request.getTime());
 		mySchedule.setFrequency(request.getFrequency());
 		
-		return myScheduleReponsitory.save(mySchedule);
+		return myScheduleRepository.save(mySchedule);
 	}
 	
 	@Override
 	public MySchedule getMySchedule(int myScheduleId) {
-		return myScheduleReponsitory.findById(myScheduleId)
+		return myScheduleRepository.findById(myScheduleId)
 				.orElseThrow(() -> new RuntimeException("Not found"));
 	}
 	
 	@Override
 	public List<MySchedule> getListMyScheduleByIdUser(int id) {
-		
-		return myScheduleReponsitory.findByUserId(id)
+		return myScheduleRepository.findByUserId(id)
 				.orElseThrow(() -> new RuntimeException("Not found"));
 	}
 	
 	@Override
 	public List<MySchedule> getListMyScheduleByIdMyPlant(int id) {
 	
-		return myScheduleReponsitory.findByMyPlantId(id)
+		return myScheduleRepository.findByMyPlantId(id)
 				.orElseThrow(() -> new RuntimeException("Not found"));
 	}
 	
 	@Override
 	public void deleteMySchedule(int myScheduleId) {
-		myScheduleReponsitory.deleteById(myScheduleId);
+		myScheduleRepository.deleteById(myScheduleId);
 	}
 	
 	private MyPlant getMyPlant(int myPlantId) {
 		return myPlantRepository.findById(myPlantId)
 				.orElseThrow(() -> new RuntimeException("Not found"));
-		
 	}
 }

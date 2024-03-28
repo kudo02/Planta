@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import nhom6.example.Planta.entity.MySchedule;
 
 @Repository
-public interface MyScheduleReponsitory extends JpaRepository<MySchedule, Integer> {
+public interface MyScheduleRepository extends JpaRepository<MySchedule, Integer> {
 	
 	@Query("SELECT ms FROM MySchedule ms JOIN ms.myPlant mp JOIN mp.user u WHERE u.id = :userId")
 	Optional<List<MySchedule>> findByUserId(@Param("userId") int userId);

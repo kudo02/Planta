@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import nhom6.example.Planta.entity.Plant;
 import nhom6.example.Planta.payload.response.PlantResponse;
 
+
 @Repository
 public interface PlantRepository extends JpaRepository<Plant, Integer> {
 	

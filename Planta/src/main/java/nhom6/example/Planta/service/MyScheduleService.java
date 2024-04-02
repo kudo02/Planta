@@ -4,9 +4,12 @@ import java.util.List;
 
 import nhom6.example.Planta.entity.MySchedule;
 import nhom6.example.Planta.payload.request.MyScheduleRequest;
+import nhom6.example.Planta.payload.response.CareCalendarResponse;
 
 
 public interface MyScheduleService {
+	
+	public List<CareCalendarResponse> getMyCareCalendar(int myPlantId);
 	
 	public MySchedule createMySchedule(MyScheduleRequest request);
 	

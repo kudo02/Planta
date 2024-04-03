@@ -96,8 +96,8 @@ public class MyPlantController {
 		return apiResponse;
 	}
 	
-	@PutMapping("/update")
-	public ApiResponse<Boolean> updateMyPlant(@RequestBody MyPlant myPlant){
+	@PutMapping("/update/{id}")
+	public ApiResponse<Boolean> updateMyPlant(@PathVariable("id") Integer id, @RequestBody MyPlant myPlant){
 		boolean check = myPlantService.updateMyPlant(myPlant);
 		ApiResponse<Boolean> apiResponse;
 		if(check) {

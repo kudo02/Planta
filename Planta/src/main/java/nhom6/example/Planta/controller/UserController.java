@@ -3,17 +3,18 @@ package nhom6.example.Planta.controller;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import nhom6.example.Planta.entity.User;
+import nhom6.example.Planta.payload.ApiResponse;
+import nhom6.example.Planta.payload.response.UserResponse;
 import nhom6.example.Planta.service.UserService;
 
 @RestController
@@ -24,34 +25,102 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
-//	@PostMapping("/login")
-//	public ResponseEntity<String> login(@RequestBody User user){
-//		try {
-//			User loginUser = userService.loginUser(user);
-//			return ResponseEntity.ok().body("{\"status\": \"success\", \"message\": \"Login successful\"}");
-//		} catch (Exception e) {
-//			return ResponseEntity.status(404).body("{\"status\": \"failure\", \"message\": \""+ e.getMessage()+"\"}");
-//		}
-//	}
-	
 	@PostMapping("/login")
-	public User login(@RequestBody User user){
-		try {
-			System.out.println(user);
-			return userService.loginUser(user);
-		} catch (Exception e) {
-			return null;
+	public ApiResponse<UserResponse> login(@RequestBody User user){
+		UserResponse userResponse = userService.login(user);
+		ApiResponse<UserResponse> apiResponse;
+		if(userResponse != null) {
+			apiResponse = ApiResponse.<UserResponse>builder()
+					.success(true)
+					.code(200)
+					.message("Login success!")
+					.result(userResponse)
+					.build();
 		}
+		else {
+			apiResponse = ApiResponse.<UserResponse>builder()
+					.success(false)
+					.code(200)
+					.message("Username or password wrong!")
+					.result(null)
+					.build();
+		}
+		return apiResponse;
 	}
 	
 	@PostMapping("/register")
-	public ResponseEntity<String> register(@RequestBody User user){
-		try {
-			User registerUser = userService.registerUser(user);
-			return ResponseEntity.ok().body("{\"status\": \"success\", \"message\": \"Register successful\"}");
-		} catch (Exception e) {
-			return ResponseEntity.status(404).body("{\"status\": \"failure\", \"message\": \""+ e.getMessage()+"\"}");
+	public ApiResponse<UserResponse> register(@RequestBody User user){
+		int check = userService.register(user);
+		ApiResponse<UserResponse> apiResponse;
+		if(check > 0) {
+			UserResponse userResponse = new UserResponse(user.getName(),user.getPhone(),user.getAddress(),user.getEmail(),user.getToken());
+			apiResponse = ApiResponse.<UserResponse>builder()
+					.success(true)
+					.code(200)
+					.message("Register success!")
+					.result(userResponse)
+					.build();
 		}
+		else{
+			apiResponse = ApiResponse.<UserResponse>builder()
+					.success(false)
+					.code(404)
+					.message("Account exist!")
+					.result(null)
+					.build();
+		}
+		
+		return apiResponse;
+	}
+	
+	@PutMapping("/update/information")
+	public ApiResponse<UserResponse> updateInformation(@RequestBody User user){
+		int check = userService.updateUser(user);
+		ApiResponse<UserResponse> apiResponse;
+		if(check > 0) {
+			UserResponse userResponse = new UserResponse(user.getName(),user.getPhone(),user.getAddress(),user.getEmail(),user.getToken());
+			apiResponse = ApiResponse.<UserResponse>builder()
+					.success(true)
+					.code(200)
+					.message("Update information success!")
+					.result(userResponse)
+					.build();
+		}
+		else{
+			apiResponse = ApiResponse.<UserResponse>builder()
+					.success(false)
+					.code(404)
+					.message("Update information fail!")
+					.result(null)
+					.build();
+		}
+		
+		return apiResponse;
+	}
+	
+	@PutMapping("/update/password")
+	public ApiResponse<UserResponse> updatePassword(@RequestBody User user){
+		int check = userService.updateUserPassword(user);
+		ApiResponse<UserResponse> apiResponse;
+		if(check > 0) {
+			UserResponse userResponse = new UserResponse(user.getName(),user.getPhone(),user.getAddress(),user.getEmail(),user.getToken());
+			apiResponse = ApiResponse.<UserResponse>builder()
+					.success(true)
+					.code(200)
+					.message("Update password success!")
+					.result(userResponse)
+					.build();
+		}
+		else{
+			apiResponse = ApiResponse.<UserResponse>builder()
+					.success(false)
+					.code(404)
+					.message("Update password fail!")
+					.result(null)
+					.build();
+		}
+		
+		return apiResponse;
 	}
 	
 	@PatchMapping("/{id}")

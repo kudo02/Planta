@@ -1,42 +1,17 @@
 package nhom6.example.Planta.service;
 
-import java.lang.reflect.Field;
 import java.util.Map;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.ReflectionUtils;
-import org.springframework.stereotype.Service;
-
 import nhom6.example.Planta.entity.User;
-import nhom6.example.Planta.repository.UserRepository;
+import nhom6.example.Planta.payload.response.UserResponse;
 
-@Service
-public class UserService{
-
-	@Autowired
-	private UserRepository userRepository;
+public interface UserService{
 	
-	public User loginUser(User user) {
-		return userRepository.findByUsernameAndPassword(user.getUsername(), user.getPassword());
-	}
+	public User updateUserByFields(int id, Map<String, Object> fields);
 	
-	public User registerUser(User user) {
-		return userRepository.save(user);
-	}
-	
-	public User updateUserByFields(int id, Map<String, Object> fields) {
-        Optional<User> existingProduct = userRepository.findById(id);
-
-        if (existingProduct.isPresent()) {
-            fields.forEach((key, value) -> {
-                Field field = ReflectionUtils.findField(User.class, key);
-                field.setAccessible(true);
-                ReflectionUtils.setField(field, existingProduct.get(), value);
-            });
-            return userRepository.save(existingProduct.get());
-        }
-        return null;
-    }
-	
+	public UserResponse getUserByToken(String token);
+	public UserResponse login(User user);
+	public int register(User user);
+	public int updateUser(User user);
+	public int updateUserToken(User user);
+	public int updateUserPassword(User user);
 }

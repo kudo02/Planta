@@ -99,7 +99,7 @@ public class MyScheduleController {
 		return ApiResponse.builder()
 				.code(200)
 				.success(true)
-				.message("success")
+				.message("delete success")
 				.build();
 	}
 

@@ -3,8 +3,6 @@ package nhom6.example.Planta.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import nhom6.example.Planta.entity.MySchedule;
 import nhom6.example.Planta.payload.ApiResponse;
 import nhom6.example.Planta.payload.request.MyScheduleRequest;
+import nhom6.example.Planta.payload.response.CareCalendarResponse;
 import nhom6.example.Planta.service.MyScheduleService;
 
 @CrossOrigin
@@ -28,6 +27,7 @@ public class MyScheduleController {
 	@Autowired
 	private MyScheduleService myScheduleService;
 	
+	
 	@PostMapping
     public ApiResponse<MySchedule> createUser(@RequestBody MyScheduleRequest request){
         ApiResponse<MySchedule> apiResponse = new ApiResponse<>();
@@ -37,17 +37,37 @@ public class MyScheduleController {
     	apiResponse.setCode(200);
     	return apiResponse;
     }
+	@GetMapping("/care/{id}")
+	public ApiResponse<List<CareCalendarResponse>> getMyCareCalendarByMyPlantId(@PathVariable int id){
+		return ApiResponse.<List<CareCalendarResponse>>builder()
+				.code(200)
+				.success(true)
+				.message("success")
+				.result(myScheduleService.getMyCareCalendar(id))
+				.build();
+	}
 	
 	@GetMapping("/user/{id}")
-	public ResponseEntity<List<MySchedule>>getListMyScheduleByIdUser(@PathVariable int id){
-		List<MySchedule> plants = myScheduleService.getListMyScheduleByIdUser(id);
-		return new ResponseEntity<>(plants, HttpStatus.OK);
+	public ApiResponse<List<MySchedule>>getListMyScheduleByIdUser(@PathVariable int id){
+		List<MySchedule> mySchedules = myScheduleService.getListMyScheduleByIdUser(id);
+		
+		return ApiResponse.<List<MySchedule>>builder()
+				.code(200)
+				.success(true)
+				.message("success")
+				.result(mySchedules)
+				.build();
 	}
 	
 	@GetMapping("/plant/{id}")
-	public ResponseEntity<List<MySchedule>>getListMyScheduleByIdMyPlant(@PathVariable int id){
+	public ApiResponse<List<MySchedule>>getListMyScheduleByIdMyPlant(@PathVariable int id){
 		List<MySchedule> mySchedules = myScheduleService.getListMyScheduleByIdMyPlant(id);
-		return new ResponseEntity<>(mySchedules, HttpStatus.OK);
+		return ApiResponse.<List<MySchedule>>builder()
+				.code(200)
+				.success(true)
+				.message("success")
+				.result(mySchedules)
+				.build();
 	}
 	
 	@GetMapping("/{myScheduleId}")
@@ -73,9 +93,14 @@ public class MyScheduleController {
     }
 	
 	@DeleteMapping("/{myScheduleId}")
-	public String deleteMySchedule(@PathVariable int myScheduleId) {
+	public ApiResponse<?> deleteMySchedule(@PathVariable int myScheduleId) {
 		myScheduleService.deleteMySchedule(myScheduleId);
-		return "My Schedule has been deleted";
+		
+		return ApiResponse.builder()
+				.code(200)
+				.success(true)
+				.message("delete success")
+				.build();
 	}
 
 }

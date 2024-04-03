@@ -1,20 +1,18 @@
 package nhom6.example.Planta.payload.response;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import nhom6.example.Planta.payload.CareSchedule;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserResponse {
-
-	private int id;
+public class CareScheduleResponse {
 	private String name;
-	private String phone;
-	private String address;
-	private String email;
-	private String token;
+	List<CareSchedule> careSchedules;
 }

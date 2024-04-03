@@ -1,8 +1,11 @@
 package nhom6.example.Planta.controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -120,4 +123,12 @@ public class UserController {
 		
 		return apiResponse;
 	}
+	
+	@PatchMapping("/{id}")
+    public User updateProductFields(@PathVariable int id,@RequestBody Map<String, Object> fields){
+//		Gson gson = new Gson(); //String json
+//        Type type = new TypeToken<Map<String, Object>>(){}.getType();
+//        Map<String, Object> fields = gson.fromJson(json, type);
+        return userService.updateUserByFields(id,fields);
+    }
 }

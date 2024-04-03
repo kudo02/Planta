@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import nhom6.example.Planta.entity.MyPlant;
 import nhom6.example.Planta.entity.User;
 import nhom6.example.Planta.payload.ApiResponse;
+import nhom6.example.Planta.payload.response.CareScheduleResponse;
+import nhom6.example.Planta.payload.response.MyPlantScheduleResponse;
 import nhom6.example.Planta.payload.response.MyPlantResponse;
 import nhom6.example.Planta.service.MyPlantService;
 
@@ -140,5 +142,29 @@ public class MyPlantController {
 					.build();
 		}
 		return apiResponse;
+	}
+	
+	@GetMapping("/today/{userid}")
+	public ApiResponse<List<CareScheduleResponse>> getMyPlantToDayByUser(@PathVariable int userid){
+		List<CareScheduleResponse> myPlants = myPlantService.getAllMyPlantToDayByUser(userid);
+		
+		return ApiResponse.<List<CareScheduleResponse>>builder()
+				.code(200)
+				.success(true)
+				.message("success")
+				.result(myPlants)
+				.build();
+	}
+	
+	@GetMapping("/calendar/{userid}")
+	public ApiResponse<List<MyPlantScheduleResponse>> getAllMyPlantCalendarByUser(@PathVariable int userid){
+		List<MyPlantScheduleResponse> mPlantScheduleResponses = myPlantService.getAllMyPlantCalendarByUser(userid);
+		
+		return ApiResponse.<List<MyPlantScheduleResponse>>builder()
+				.code(200)
+				.success(true)
+				.message("success")
+				.result(mPlantScheduleResponses)
+				.build();
 	}
 }

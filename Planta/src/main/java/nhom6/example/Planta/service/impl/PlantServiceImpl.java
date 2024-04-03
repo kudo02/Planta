@@ -1,6 +1,8 @@
 package nhom6.example.Planta.service.impl;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,15 @@ public class PlantServiceImpl implements PlantService {
 	
 	@Override
 	public List<PlantResponse> getListPlants() {
-		return plantRepository.findAllProjected();
-	}
+        List<PlantResponse> allPlants = plantRepository.findAllProjected();
+        
+        if (allPlants.isEmpty()) {
+            return allPlants;
+        }
+        
+        long seed = System.nanoTime(); // Sử dụng seed từ thời gian hiện tại để tạo số ngẫu nhiên
+        Collections.shuffle(allPlants, new Random(seed));
+        
+        return allPlants;
+    }
 }

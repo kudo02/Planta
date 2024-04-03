@@ -71,32 +71,7 @@ public class UserController {
 		return apiResponse;
 	}
 	
-//	@PutMapping("/update/information")
-//	public ApiResponse<UserResponse> updateInformation(@RequestBody User user){
-//		int check = userService.updateUser(user);
-//		ApiResponse<UserResponse> apiResponse;
-//		if(check > 0) {
-//			UserResponse userResponse = new UserResponse(user.getId(), user.getName(),user.getPhone(),user.getAddress(),user.getEmail(),user.getToken());
-//			apiResponse = ApiResponse.<UserResponse>builder()
-//					.success(true)
-//					.code(200)
-//					.message("Update information success!")
-//					.result(userResponse)
-//					.build();
-//		}
-//		else{
-//			apiResponse = ApiResponse.<UserResponse>builder()
-//					.success(false)
-//					.code(404)
-//					.message("Update information fail!")
-//					.result(null)
-//					.build();
-//		}
-//		
-//		return apiResponse;
-//	}
-	
-	@PatchMapping("/update/information")
+	@PutMapping("/update/information")
 	public ApiResponse<UserResponse> updateInformation(@RequestBody User user){
 		int check = userService.updateUser(user);
 		ApiResponse<UserResponse> apiResponse;

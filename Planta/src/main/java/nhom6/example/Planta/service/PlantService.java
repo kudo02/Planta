@@ -10,4 +10,6 @@ public interface PlantService {
 	public Plant getPlantDetail(int id);
 	
 	public List<PlantResponse> getListPlants();
+	
+	public List<PlantResponse> getAllPlants(int page, int limit);
 }

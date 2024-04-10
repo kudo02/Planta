@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import nhom6.example.Planta.entity.Plant;
@@ -21,7 +23,7 @@ public class PlantServiceImpl implements PlantService {
 	@Override
 	public Plant getPlantDetail(int id) {
 		return plantRepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("Not found"));
+				.orElseThrow(() -> new RuntimeException("Không tìm thấy cây"));
 	}
 	
 	@Override
@@ -36,5 +38,12 @@ public class PlantServiceImpl implements PlantService {
         Collections.shuffle(allPlants, new Random(seed));
         
         return allPlants;
+    }
+	
+	public List<PlantResponse> getAllPlants(int page, int limit) {
+        PageRequest pageRequest = PageRequest.of(page, limit);
+        Page<PlantResponse> plantsPage = plantRepository.findAllProjected(pageRequest);
+        List<PlantResponse> plantResponses = plantsPage.getContent();
+        return plantResponses;
     }
 }

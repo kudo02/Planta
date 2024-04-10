@@ -156,6 +156,18 @@ public class MyPlantController {
 				.build();
 	}
 	
+	@GetMapping("/schedule/{userid}")
+	public ApiResponse<List<MyPlantScheduleResponse>> getMyPlantScheduleByUser(@PathVariable int userid){
+		List<MyPlantScheduleResponse> mPlantScheduleResponses = myPlantService.getMyPlantScheduleByUser(userid);
+		
+		return ApiResponse.<List<MyPlantScheduleResponse>>builder()
+				.code(200)
+				.success(true)
+				.message("success")
+				.result(mPlantScheduleResponses)
+				.build();
+	}
+	
 	@GetMapping("/calendar/{userid}")
 	public ApiResponse<List<MyPlantScheduleResponse>> getAllMyPlantCalendarByUser(@PathVariable int userid){
 		List<MyPlantScheduleResponse> mPlantScheduleResponses = myPlantService.getAllMyPlantCalendarByUser(userid);

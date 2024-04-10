@@ -11,12 +11,20 @@ import nhom6.example.Planta.payload.response.MyPlantScheduleResponse;
 public interface MyPlantService {
 
 	public List<MyPlantResponse> getAllMyPlantByUser(User user);
+	
 	public MyPlantResponse getMyPlantByUser(User user, int id);
+	
 	public boolean addMyPlant(MyPlant myPlant);
+	
 	public boolean updateMyPlant(MyPlant myPlant);
+	
 	public boolean deleteMyPlant(int id);
 	
+	//
 	public List<CareScheduleResponse> getAllMyPlantToDayByUser(int userId);
+	
+	public List<MyPlantScheduleResponse> getMyPlantScheduleByUser(int userId);
+	
 	public List<MyPlantScheduleResponse> getAllMyPlantCalendarByUser(int userId);
 }
 

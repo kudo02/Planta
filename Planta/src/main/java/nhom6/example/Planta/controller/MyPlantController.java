@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import nhom6.example.Planta.entity.MyPlant;
-import nhom6.example.Planta.entity.User;
 import nhom6.example.Planta.payload.ApiResponse;
 import nhom6.example.Planta.payload.request.MyPlantRequest;
 import nhom6.example.Planta.payload.response.CareScheduleResponse;

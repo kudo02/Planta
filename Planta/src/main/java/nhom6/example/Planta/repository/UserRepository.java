@@ -16,8 +16,6 @@ public interface UserRepository extends JpaRepository<User, Integer>{
 	
 	User findByUsernameAndPassword(String username, String password);
 	
-	User findByUsername(String username);
-	
 	@Modifying
 	@Transactional
 	@Query(value = "INSERT INTO user(address,email,name,password,phone,username) VALUE (:address, :email, :name, :password, :phone, :username)", nativeQuery = true)

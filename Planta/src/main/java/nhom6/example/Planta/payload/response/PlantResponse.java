@@ -14,5 +14,6 @@ public class PlantResponse {
 	private int id;
 	private String name;
 	private String typePlant;
-	private String mainImage;	
+	private String mainImage;
+	
 }

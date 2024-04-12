@@ -25,6 +25,8 @@ public interface MyPlantRepository extends JpaRepository<MyPlant, Integer>{
 	@Query("SELECT mp FROM MyPlant mp JOIN mp.user u WHERE u.id = :userId")
 	Optional<List<MyPlant>> getAllMyPlantByUserId(@Param("userId") int userId);
 
+	@Modifying
+	@Transactional
 	@Query(value = "INSERT INTO myplant(growndate,image,kindoflight,name,idplant,iduser) VALUE (:growndate, :image, :kindoflight, :name, :idplant, :iduser)", nativeQuery = true)
 	int addMyPlant(@Param("growndate") Date growndate, @Param("image") String image, @Param("kindoflight") String kindoflight, 
 			@Param("name") String name, @Param("idplant") int idplant, @Param("iduser") int iduser);

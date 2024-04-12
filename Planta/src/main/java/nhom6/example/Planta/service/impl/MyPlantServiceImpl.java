@@ -1,11 +1,13 @@
 package nhom6.example.Planta.service.impl;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -117,7 +119,7 @@ public class MyPlantServiceImpl implements MyPlantService {
 	@Override
 	public List<CareScheduleResponse> getAllMyPlantToDayByUser(int userId) {
 		List<MyPlant> myPlants = myPlantRepository.getAllMyPlantByUserId(userId)
-	    		.orElseThrow(() -> new RuntimeException("Not found"));
+	    		.orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
 		
 	    Map<String, List<CareSchedule>> groupedSchedules = new HashMap<>();
 
@@ -166,9 +168,37 @@ public class MyPlantServiceImpl implements MyPlantService {
 	}
 	
 	@Override
+	public List<MyPlantScheduleResponse> getMyPlantScheduleByUser(int userId) {
+		List<MyPlant> myPlants = myPlantRepository.getAllMyPlantByUserId(userId)
+	    		.orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
+		
+		LocalDate localDate = LocalDate.now();
+	    Date currentDate = Date.valueOf(localDate);
+		
+		List<MyPlantScheduleResponse> myPlantResponses = new ArrayList<>();
+		for(MyPlant myPlant : myPlants) {
+			
+			MyPlantScheduleResponse myPlantResponse = MyPlantScheduleResponse.builder()
+					.id(myPlant.getId())
+					.name(myPlant.getName())
+					.image(myPlant.getImage())
+					.mySchedules(filterSchedules(myPlant.getMySchedules(), currentDate))
+					.build();
+			myPlantResponses.add(myPlantResponse);
+		}
+		return myPlantResponses;
+	}
+	
+	public List<MySchedule> filterSchedules(List<MySchedule> schedules, Date currentDate) {
+        return schedules.stream()
+                .filter(schedule -> !schedule.getEndDate().before(currentDate))
+                .collect(Collectors.toList());
+    }
+	
+	@Override
 	public List<MyPlantScheduleResponse> getAllMyPlantCalendarByUser(int userId) {
 		List<MyPlant> myPlants = myPlantRepository.getAllMyPlantByUserId(userId)
-	    		.orElseThrow(() -> new RuntimeException("Not found"));
+	    		.orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
 		
 		List<MyPlantScheduleResponse> myPlantResponses = new ArrayList<>();
 		for(MyPlant myPlant : myPlants) {
@@ -183,43 +213,4 @@ public class MyPlantServiceImpl implements MyPlantService {
 		return myPlantResponses;
 	}
 	
-	// Test
-	public List<CareScheduleResponse> geMyPlantToDayByUser(int userId) {
-	    List<MyPlant> myPlants = myPlantRepository.getAllMyPlantByUserId(userId)
-	    		.orElseThrow(() -> new RuntimeException("Not found"));
-	    
-	    Map<String, List<CareSchedule>> groupedSchedules = new HashMap<>();
-
-	    // Nhóm các CareSchedule theo tên bài tập
-	    for (MyPlant myPlant : myPlants) {
-	        List<MySchedule> mySchedules = myPlant.getMySchedules();
-	        for (MySchedule mySchedule : mySchedules) {
-	            String scheduleName = mySchedule.getName();
-	            CareSchedule careSchedule = CareSchedule.builder()
-	            		.myPlantId(myPlant.getId())
-	            		.myPlantName(myPlant.getName())
-	            		.image(myPlant.getImage())
-	            		.startDate(mySchedule.getStartDate())
-	            		.endDate(mySchedule.getEndDate())
-	            		.time(mySchedule.getTime())
-	            		.frequency(mySchedule.getFrequency())
-	            		.build();
-	         
-
-	            groupedSchedules.computeIfAbsent(scheduleName, k -> new ArrayList<>()).add(careSchedule);
-	        }
-	    }
-
-	    // Tạo danh sách MyCareScheduleResponse từ map đã nhóm
-	    List<CareScheduleResponse> scheduleResponses = new ArrayList<>();
-	    for (Map.Entry<String, List<CareSchedule>> entry : groupedSchedules.entrySet()) {
-	        CareScheduleResponse myCareScheduleResponse = new CareScheduleResponse();
-	        myCareScheduleResponse.setName(entry.getKey());
-	        myCareScheduleResponse.setCareSchedules(entry.getValue());
-	        scheduleResponses.add(myCareScheduleResponse);
-	    }
-
-	    return scheduleResponses;
-	}
-
 }

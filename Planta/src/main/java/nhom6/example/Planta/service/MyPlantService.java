@@ -17,7 +17,11 @@ public interface MyPlantService {
 	public boolean updateMyPlant(int idUser, MyPlant myPlant);
 	public boolean deleteMyPlant(int idMyPlant);
 	
+	//
 	public List<CareScheduleResponse> getAllMyPlantToDayByUser(int userId);
+	
+	public List<MyPlantScheduleResponse> getMyPlantScheduleByUser(int userId);
+	
 	public List<MyPlantScheduleResponse> getAllMyPlantCalendarByUser(int userId);
 }
 

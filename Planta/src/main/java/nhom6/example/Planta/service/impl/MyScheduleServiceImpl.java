@@ -60,20 +60,20 @@ public class MyScheduleServiceImpl implements MyScheduleService {
 	@Override
 	public MySchedule getMySchedule(int myScheduleId) {
 		return myScheduleRepository.findById(myScheduleId)
-				.orElseThrow(() -> new RuntimeException("Not found"));
+				.orElseThrow(() -> new RuntimeException("Không tìm thấy lịch trình của bạn"));
 	}
 	
 	@Override
 	public List<MySchedule> getListMyScheduleByIdUser(int id) {
 		return myScheduleRepository.findByUserId(id)
-				.orElseThrow(() -> new RuntimeException("Not found"));
+				.orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
 	}
 	
 	@Override
 	public List<MySchedule> getListMyScheduleByIdMyPlant(int id) {
 	
 		return myScheduleRepository.findByMyPlantId(id)
-				.orElseThrow(() -> new RuntimeException("Not found"));
+				.orElseThrow(() -> new RuntimeException("Cây của bạn không được tìm thấy"));
 	}
 	
 	@Override
@@ -83,14 +83,14 @@ public class MyScheduleServiceImpl implements MyScheduleService {
 	
 	private MyPlant getMyPlant(int myPlantId) {
 		return myPlantRepository.findById(myPlantId)
-				.orElseThrow(() -> new RuntimeException("Not found"));
+				.orElseThrow(() -> new RuntimeException("Cây của bạn không được tìm thấy"));
 	}
 	
 	
 	@Override
 	public List<CareCalendarResponse> getMyCareCalendar(int myPlantId) {
 	    List<MySchedule> mySchedules = myScheduleRepository.findByMyPlantId(myPlantId)
-	            .orElseThrow(() -> new RuntimeException("Not found"));
+	            .orElseThrow(() -> new RuntimeException("Cây của bạn không được tìm thấy"));
 
 	    // Sử dụng một Map để nhóm CareCalendar theo ngày chăm sóc
 	    Map<Date, List<CareCalendar>> careCalendarMap = new HashMap<>();

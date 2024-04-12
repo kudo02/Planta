@@ -27,6 +27,7 @@ public class UserController {
 	
 	@PostMapping("/login")
 	public ApiResponse<UserResponse> login(@RequestBody User user){
+		System.out.println(user);
 		UserResponse userResponse = userService.login(user);
 		ApiResponse<UserResponse> apiResponse;
 		if(userResponse != null) {
@@ -53,7 +54,7 @@ public class UserController {
 		int check = userService.register(user);
 		ApiResponse<UserResponse> apiResponse;
 		if(check > 0) {
-			UserResponse userResponse = new UserResponse(user.getName(),user.getPhone(),user.getAddress(),user.getEmail(),user.getToken());
+			UserResponse userResponse = new UserResponse(user.getId(), user.getName(),user.getPhone(),user.getAddress(),user.getEmail(),user.getToken());
 			apiResponse = ApiResponse.<UserResponse>builder()
 					.success(true)
 					.code(200)
@@ -65,7 +66,7 @@ public class UserController {
 			apiResponse = ApiResponse.<UserResponse>builder()
 					.success(false)
 					.code(404)
-					.message("Account exist!")
+					.message("Account already exist!")
 					.result(null)
 					.build();
 		}
@@ -78,7 +79,7 @@ public class UserController {
 		int check = userService.updateUser(user);
 		ApiResponse<UserResponse> apiResponse;
 		if(check > 0) {
-			UserResponse userResponse = new UserResponse(user.getName(),user.getPhone(),user.getAddress(),user.getEmail(),user.getToken());
+			UserResponse userResponse = new UserResponse(user.getId(), user.getName(),user.getPhone(),user.getAddress(),user.getEmail(),user.getToken());
 			apiResponse = ApiResponse.<UserResponse>builder()
 					.success(true)
 					.code(200)
@@ -103,7 +104,7 @@ public class UserController {
 		int check = userService.updateUserPassword(user);
 		ApiResponse<UserResponse> apiResponse;
 		if(check > 0) {
-			UserResponse userResponse = new UserResponse(user.getName(),user.getPhone(),user.getAddress(),user.getEmail(),user.getToken());
+			UserResponse userResponse = new UserResponse(user.getId(), user.getName(),user.getPhone(),user.getAddress(),user.getEmail(),user.getToken());
 			apiResponse = ApiResponse.<UserResponse>builder()
 					.success(true)
 					.code(200)

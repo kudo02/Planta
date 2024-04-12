@@ -3,6 +3,7 @@ package nhom6.example.Planta.service.impl;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,10 +16,12 @@ import nhom6.example.Planta.entity.MyPlant;
 import nhom6.example.Planta.entity.MySchedule;
 import nhom6.example.Planta.entity.User;
 import nhom6.example.Planta.payload.CareSchedule;
+import nhom6.example.Planta.payload.request.MyPlantRequest;
 import nhom6.example.Planta.payload.response.CareScheduleResponse;
 import nhom6.example.Planta.payload.response.MyPlantScheduleResponse;
 import nhom6.example.Planta.payload.response.MyPlantResponse;
 import nhom6.example.Planta.payload.response.PlantResponse;
+import nhom6.example.Planta.payload.response.PlantResponseOfMyPlant;
 import nhom6.example.Planta.repository.MyPlantRepository;
 import nhom6.example.Planta.service.MyPlantService;
 
@@ -30,16 +33,21 @@ public class MyPlantServiceImpl implements MyPlantService {
 	
 	
 	@Override
-	public List<MyPlantResponse> getAllMyPlantByUser(User user){
-		List<MyPlant> myPlants = myPlantRepository.getAllMyPlantByUser(user.getId());
+	public List<MyPlantResponse> getAllMyPlantByUser(int id){
+		List<MyPlant> myPlants = myPlantRepository.getAllMyPlantByUser(id);
 
 		List<MyPlantResponse> myPlantResponses = new ArrayList<>();
 		for(MyPlant myPlant : myPlants) {
-			PlantResponse plantResponse = new PlantResponse();
-			plantResponse.setId(myPlant.getPlant().getId());
-			plantResponse.setName(myPlant.getPlant().getName());
-			plantResponse.setTypePlant(myPlant.getPlant().getTypePlant());
-			plantResponse.setMainImage(myPlant.getPlant().getMainImage());
+			PlantResponseOfMyPlant plantResponseOfMyPlant = new PlantResponseOfMyPlant();
+			plantResponseOfMyPlant.setId(myPlant.getPlant().getId());
+			plantResponseOfMyPlant.setName(myPlant.getPlant().getName());
+			plantResponseOfMyPlant.setTypePlant(myPlant.getPlant().getTypePlant());
+			plantResponseOfMyPlant.setMainImage(myPlant.getPlant().getMainImage());
+			plantResponseOfMyPlant.setSecondaryImage(myPlant.getPlant().getSecondaryImage());
+			plantResponseOfMyPlant.setSecondaryImage(myPlant.getPlant().getTypeSoil());
+			plantResponseOfMyPlant.setSecondaryImage(myPlant.getPlant().getMatureSize());
+			plantResponseOfMyPlant.setSecondaryImage(myPlant.getPlant().getMatureTime());
+			plantResponseOfMyPlant.setSecondaryImage(myPlant.getPlant().getDescription());
 			
 			MyPlantResponse myPlantResponse = new MyPlantResponse();
 			myPlantResponse.setId(myPlant.getId());
@@ -47,23 +55,27 @@ public class MyPlantServiceImpl implements MyPlantService {
 			myPlantResponse.setGrownDate(myPlant.getGrownDate());
 			myPlantResponse.setKindOfLight(myPlant.getKindOfLight());
 			myPlantResponse.setImage(myPlant.getImage());
-			myPlantResponse.setPlantResponse(plantResponse);
+			myPlantResponse.setPlantResponseOfMyPlant(plantResponseOfMyPlant);
 			
 			myPlantResponses.add(myPlantResponse);
 		}
-
 		return myPlantResponses;
 	}
 	
 	@Override
-	public MyPlantResponse getMyPlantByUser(User user, int id) {
-		MyPlant myPlant = myPlantRepository.getMyPlantByUser(user.getId(), id);
+	public MyPlantResponse getMyPlantByUser(int idUser, int idMyPlant) {
+		MyPlant myPlant = myPlantRepository.getMyPlantByUser(idUser, idMyPlant);
 		
-		PlantResponse plantResponse = new PlantResponse();
-		plantResponse.setId(myPlant.getPlant().getId());
-		plantResponse.setName(myPlant.getPlant().getName());
-		plantResponse.setTypePlant(myPlant.getPlant().getTypePlant());
-		plantResponse.setMainImage(myPlant.getPlant().getMainImage());
+		PlantResponseOfMyPlant plantResponseOfMyPlant = new PlantResponseOfMyPlant();
+		plantResponseOfMyPlant.setId(myPlant.getPlant().getId());
+		plantResponseOfMyPlant.setName(myPlant.getPlant().getName());
+		plantResponseOfMyPlant.setTypePlant(myPlant.getPlant().getTypePlant());
+		plantResponseOfMyPlant.setMainImage(myPlant.getPlant().getMainImage());
+		plantResponseOfMyPlant.setSecondaryImage(myPlant.getPlant().getSecondaryImage());
+		plantResponseOfMyPlant.setSecondaryImage(myPlant.getPlant().getTypeSoil());
+		plantResponseOfMyPlant.setSecondaryImage(myPlant.getPlant().getMatureSize());
+		plantResponseOfMyPlant.setSecondaryImage(myPlant.getPlant().getMatureTime());
+		plantResponseOfMyPlant.setSecondaryImage(myPlant.getPlant().getDescription());
 		
 		MyPlantResponse myPlantResponse = new MyPlantResponse();
 		myPlantResponse.setId(myPlant.getId());
@@ -71,15 +83,15 @@ public class MyPlantServiceImpl implements MyPlantService {
 		myPlantResponse.setGrownDate(myPlant.getGrownDate());
 		myPlantResponse.setKindOfLight(myPlant.getKindOfLight());
 		myPlantResponse.setImage(myPlant.getImage());
-		myPlantResponse.setPlantResponse(plantResponse);
+		myPlantResponse.setPlantResponseOfMyPlant(plantResponseOfMyPlant);
 		
 		return myPlantResponse;
 	}
 
 	@Override
-	public boolean addMyPlant(MyPlant myPlant) {
-		int check = myPlantRepository.addMyPlant(myPlant.getGrownDate(), myPlant.getImage(), myPlant.getKindOfLight(), myPlant.getName(), 
-				myPlant.getPlant().getId(), myPlant.getUser().getId());
+	public boolean addMyPlant(int idUser, MyPlantRequest myPlantRequest) {
+		int check = myPlantRepository.addMyPlant(myPlantRequest.getGrownDate(), myPlantRequest.getImage(), myPlantRequest.getKindOfLight(), 
+				myPlantRequest.getName(), myPlantRequest.getPlantResponseOfMyPlant().getId(), idUser);
 		if(check > 0) 
 			return true;
 		else
@@ -87,8 +99,8 @@ public class MyPlantServiceImpl implements MyPlantService {
 	}
 
 	@Override
-	public boolean updateMyPlant(MyPlant myPlant) {
-		int check = myPlantRepository.updateMyPlant(myPlant.getGrownDate(), myPlant.getImage(), myPlant.getKindOfLight(), myPlant.getName(), myPlant.getId());
+	public boolean updateMyPlant(int idUser, MyPlant myPlant) {
+		int check = myPlantRepository.updateMyPlant(myPlant.getGrownDate(), myPlant.getImage(), myPlant.getKindOfLight(), myPlant.getName(), idUser);
 		if(check > 0) 
 			return true;
 		else
@@ -96,8 +108,8 @@ public class MyPlantServiceImpl implements MyPlantService {
 	}
 
 	@Override
-	public boolean deleteMyPlant(int id) {
-		int check = myPlantRepository.deleteMyPlant(id);
+	public boolean deleteMyPlant(int idMyPlant) {
+		int check = myPlantRepository.deleteMyPlant(idMyPlant);
 		if(check > 0) 
 			return true;
 		else

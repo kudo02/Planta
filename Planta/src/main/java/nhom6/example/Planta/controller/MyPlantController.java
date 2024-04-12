@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import nhom6.example.Planta.entity.MyPlant;
 import nhom6.example.Planta.entity.User;
 import nhom6.example.Planta.payload.ApiResponse;
+import nhom6.example.Planta.payload.request.MyPlantRequest;
 import nhom6.example.Planta.payload.response.CareScheduleResponse;
 import nhom6.example.Planta.payload.response.MyPlantScheduleResponse;
 import nhom6.example.Planta.payload.response.MyPlantResponse;
@@ -29,9 +30,9 @@ public class MyPlantController {
 	@Autowired
 	private MyPlantService myPlantService;
 	
-	@GetMapping("/all")
-	public ApiResponse<List<MyPlantResponse>> getAllMyPlantByUser(@RequestBody User user){
-		List<MyPlantResponse> myPlantResponses = myPlantService.getAllMyPlantByUser(user);
+	@GetMapping("/{id}/all")
+	public ApiResponse<List<MyPlantResponse>> getAllMyPlantByUser(@PathVariable("id") int id){
+		List<MyPlantResponse> myPlantResponses = myPlantService.getAllMyPlantByUser(id);
 		ApiResponse<List<MyPlantResponse>> apiResponse;
 		if(myPlantResponses != null) {
 			apiResponse = ApiResponse.<List<MyPlantResponse>>builder()
@@ -52,9 +53,9 @@ public class MyPlantController {
 		return apiResponse;
 	}
 	
-	@GetMapping("/{id}")
-	public ApiResponse<MyPlantResponse> getMyPlantByUser(@RequestBody User user, @PathVariable("id") int id){
-		MyPlantResponse myPlantResponse = myPlantService.getMyPlantByUser(user, id);
+	@GetMapping("/{idUser}/{idMyPlant}")
+	public ApiResponse<MyPlantResponse> getMyPlantByUser(@PathVariable("idUser") int idUser, @PathVariable("idMyPlant") int idMyPlant){
+		MyPlantResponse myPlantResponse = myPlantService.getMyPlantByUser(idUser, idMyPlant);
 		ApiResponse<MyPlantResponse> apiResponse;
 		if(myPlantResponse != null) {
 			apiResponse = ApiResponse.<MyPlantResponse>builder()
@@ -75,15 +76,16 @@ public class MyPlantController {
 		return apiResponse;
 	}
 	
-	@PostMapping("/add")
-	public ApiResponse<Boolean> addMyPlant(@RequestBody MyPlant myPlant){
-		boolean check = myPlantService.addMyPlant(myPlant);
+	@PostMapping("/{idUser}/add")
+	public ApiResponse<Boolean> addMyPlant(@PathVariable("idUser") int idUser, @RequestBody MyPlantRequest myPlantRequest){
+		System.out.println(myPlantRequest);
+		boolean check = myPlantService.addMyPlant(idUser, myPlantRequest);
 		ApiResponse<Boolean> apiResponse;
 		if(check) {
 			apiResponse = ApiResponse.<Boolean>builder()
 					.success(true)
 					.code(200)
-					.message("Add my plant success")
+					.message("Add my plant success!")
 					.result(check)
 					.build();
 		}
@@ -91,22 +93,23 @@ public class MyPlantController {
 			apiResponse = ApiResponse.<Boolean>builder()
 					.success(false)
 					.code(404)
-					.message("Add my plant fail")
+					.message("Add my plant fail!")
 					.result(check)
 					.build();
 		}
 		return apiResponse;
 	}
 	
-	@PutMapping("/update")
-	public ApiResponse<Boolean> updateMyPlant(@RequestBody MyPlant myPlant){
-		boolean check = myPlantService.updateMyPlant(myPlant);
+	@PutMapping("/update/{id}")
+	public ApiResponse<Boolean> updateMyPlant(@PathVariable("id") Integer id, @RequestBody MyPlant myPlant){
+		System.out.println(myPlant);
+		boolean check = myPlantService.updateMyPlant(id, myPlant);
 		ApiResponse<Boolean> apiResponse;
 		if(check) {
 			apiResponse = ApiResponse.<Boolean>builder()
 					.success(true)
 					.code(200)
-					.message("Update my plant success")
+					.message("Update my plant success!")
 					.result(check)
 					.build();
 		}
@@ -114,7 +117,7 @@ public class MyPlantController {
 			apiResponse = ApiResponse.<Boolean>builder()
 					.success(false)
 					.code(404)
-					.message("Update my plant fail")
+					.message("Update my plant fail!")
 					.result(check)
 					.build();
 		}
@@ -129,7 +132,7 @@ public class MyPlantController {
 			apiResponse = ApiResponse.<Boolean>builder()
 					.success(true)
 					.code(200)
-					.message("Delete my plant success")
+					.message("Delete my plant success!")
 					.result(check)
 					.build();
 		}
@@ -137,7 +140,7 @@ public class MyPlantController {
 			apiResponse = ApiResponse.<Boolean>builder()
 					.success(false)
 					.code(404)
-					.message("Delete my plant fail")
+					.message("Delete my plant fail!")
 					.result(check)
 					.build();
 		}

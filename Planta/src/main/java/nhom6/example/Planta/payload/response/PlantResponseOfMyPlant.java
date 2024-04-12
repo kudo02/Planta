@@ -1,23 +1,22 @@
 package nhom6.example.Planta.payload.response;
 
-import java.sql.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-public class MyPlantResponse {
-	
+public class PlantResponseOfMyPlant {
 	private int id;
 	private String name;
-	private Date grownDate;
-	private String kindOfLight;
-	private String image;
-	private PlantResponseOfMyPlant plantResponseOfMyPlant;
+	private String typePlant;
+	private String mainImage;
+    private String secondaryImage;
+    private String typeSoil;
+    private String matureSize;
+    private String matureTime;
+    private String description;
 }

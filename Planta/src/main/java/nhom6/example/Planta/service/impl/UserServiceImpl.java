@@ -22,13 +22,13 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public UserResponse getUserByToken(String token) {
 		User user = userRepository.getUserByToken(token);
-		UserResponse userResponse = new UserResponse(user.getName(),user.getPhone(),user.getAddress(),user.getEmail(),user.getToken());
+		UserResponse userResponse = new UserResponse(user.getId(), user.getName(),user.getPhone(),user.getAddress(),user.getEmail(),user.getToken());
 		return userResponse;
 	}
 	
 	public UserResponse login(User userRequest) {
 		User user = userRepository.findByUsernameAndPassword(userRequest.getUsername(), userRequest.getPassword());
-		UserResponse userResponse = new UserResponse(user.getName(),user.getPhone(),user.getAddress(),user.getEmail(),user.getToken());
+		UserResponse userResponse = new UserResponse(user.getId(), user.getName(),user.getPhone(),user.getAddress(),user.getEmail(),user.getToken());
 		return userResponse;
 	}
 	

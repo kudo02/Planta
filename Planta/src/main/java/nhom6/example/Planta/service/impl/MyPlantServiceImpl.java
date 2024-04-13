@@ -86,9 +86,24 @@ public class MyPlantServiceImpl implements MyPlantService {
 	}
 
 	@Override
+	public MyPlantRequest getLastMyPlantByUser(int idUser) {
+		MyPlant myPlant = myPlantRepository.getLastMyPlantByUser(idUser);
+		
+		MyPlantRequest myPlantRequest = new MyPlantRequest();
+		myPlantRequest.setId(myPlant.getId());
+		myPlantRequest.setName(myPlant.getName());
+		myPlantRequest.setGrownDate(myPlant.getGrownDate());
+		myPlantRequest.setKindOfLight(myPlant.getKindOfLight());
+		myPlantRequest.setImage(myPlant.getImage());
+		myPlantRequest.setIdPlant(myPlant.getPlant().getId());
+		
+		return myPlantRequest;
+	}
+	
+	@Override
 	public boolean addMyPlant(int idUser, MyPlantRequest myPlantRequest) {
 		int check = myPlantRepository.addMyPlant(myPlantRequest.getGrownDate(), myPlantRequest.getImage(), myPlantRequest.getKindOfLight(), 
-				myPlantRequest.getName(), myPlantRequest.getPlantResponseOfMyPlant().getId(), idUser);
+				myPlantRequest.getName(), myPlantRequest.getIdPlant(), idUser);
 		if(check > 0) 
 			return true;
 		else
@@ -96,8 +111,8 @@ public class MyPlantServiceImpl implements MyPlantService {
 	}
 
 	@Override
-	public boolean updateMyPlant(int idUser, MyPlant myPlant) {
-		int check = myPlantRepository.updateMyPlant(myPlant.getGrownDate(), myPlant.getImage(), myPlant.getKindOfLight(), myPlant.getName(), idUser);
+	public boolean updateMyPlant(int idUser, MyPlantRequest myPlantRequest) {
+		int check = myPlantRepository.updateMyPlant(myPlantRequest.getGrownDate(), myPlantRequest.getImage(), myPlantRequest.getKindOfLight(), myPlantRequest.getName(), idUser);
 		if(check > 0) 
 			return true;
 		else

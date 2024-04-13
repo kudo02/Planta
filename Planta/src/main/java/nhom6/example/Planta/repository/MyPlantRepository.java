@@ -22,6 +22,9 @@ public interface MyPlantRepository extends JpaRepository<MyPlant, Integer>{
 	@Query(value = "SELECT * FROM myplant mp WHERE mp.iduser = :idUser AND mp.id = :id", nativeQuery = true)
 	MyPlant getMyPlantByUser(@Param("idUser") int idUser, @Param("id") int id);
 	
+	@Query(value = "SELECT * FROM myplant mp WHERE mp.iduser = :idUser ORDER BY mp.id DESC LIMIT 1", nativeQuery = true)
+	MyPlant getLastMyPlantByUser(@Param("idUser") int idUser);
+	
 	@Query("SELECT mp FROM MyPlant mp JOIN mp.user u WHERE u.id = :userId")
 	Optional<List<MyPlant>> getAllMyPlantByUserId(@Param("userId") int userId);
 

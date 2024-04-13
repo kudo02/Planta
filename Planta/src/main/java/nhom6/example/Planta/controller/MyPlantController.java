@@ -76,33 +76,35 @@ public class MyPlantController {
 	}
 	
 	@PostMapping("/{idUser}/add")
-	public ApiResponse<Boolean> addMyPlant(@PathVariable("idUser") int idUser, @RequestBody MyPlantRequest myPlantRequest){
+	public ApiResponse<MyPlantRequest> addMyPlant(@PathVariable("idUser") int idUser, @RequestBody MyPlantRequest myPlantRequest){
 		System.out.println(myPlantRequest);
 		boolean check = myPlantService.addMyPlant(idUser, myPlantRequest);
-		ApiResponse<Boolean> apiResponse;
+		
+		ApiResponse<MyPlantRequest> apiResponse;
 		if(check) {
-			apiResponse = ApiResponse.<Boolean>builder()
+			MyPlantRequest myPlantResponse = myPlantService.getLastMyPlantByUser(idUser);
+			apiResponse = ApiResponse.<MyPlantRequest>builder()
 					.success(true)
 					.code(200)
 					.message("Add my plant success!")
-					.result(check)
+					.result(myPlantResponse)
 					.build();
 		}
 		else {
-			apiResponse = ApiResponse.<Boolean>builder()
+			apiResponse = ApiResponse.<MyPlantRequest>builder()
 					.success(false)
 					.code(404)
 					.message("Add my plant fail!")
-					.result(check)
+					.result(myPlantRequest)
 					.build();
 		}
 		return apiResponse;
 	}
 	
 	@PutMapping("/update/{id}")
-	public ApiResponse<Boolean> updateMyPlant(@PathVariable("id") Integer id, @RequestBody MyPlant myPlant){
-		System.out.println(myPlant);
-		boolean check = myPlantService.updateMyPlant(id, myPlant);
+	public ApiResponse<Boolean> updateMyPlant(@PathVariable("id") Integer id, @RequestBody MyPlantRequest myPlantRequest){
+		System.out.println(myPlantRequest);
+		boolean check = myPlantService.updateMyPlant(id, myPlantRequest);
 		ApiResponse<Boolean> apiResponse;
 		if(check) {
 			apiResponse = ApiResponse.<Boolean>builder()

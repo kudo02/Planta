@@ -22,5 +22,5 @@ public class MyPlantRequest {
 	private Date grownDate;
 	private String kindOfLight;
 	private String image;
-	private PlantResponseOfMyPlant plantResponseOfMyPlant;
+	private int idPlant;
 }

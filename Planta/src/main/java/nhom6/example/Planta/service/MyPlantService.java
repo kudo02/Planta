@@ -12,8 +12,9 @@ public interface MyPlantService {
 
 	public List<MyPlantResponse> getAllMyPlantByUser(int id);
 	public MyPlantResponse getMyPlantByUser(int idUser, int idMyPlant);
+	public MyPlantRequest getLastMyPlantByUser(int idUser);
 	public boolean addMyPlant(int idUser, MyPlantRequest myPlantRequest);
-	public boolean updateMyPlant(int idUser, MyPlant myPlant);
+	public boolean updateMyPlant(int idUser, MyPlantRequest myPlantRequest);
 	public boolean deleteMyPlant(int idMyPlant);
 	
 	//

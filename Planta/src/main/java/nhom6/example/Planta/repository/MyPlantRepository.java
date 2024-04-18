@@ -16,10 +16,10 @@ import nhom6.example.Planta.entity.MyPlant;
 @Repository
 public interface MyPlantRepository extends JpaRepository<MyPlant, Integer>{
 	
-	@Query(value = "SELECT * FROM myplant mp WHERE mp.iduser = :idUser ORDER BY mp.growndate DESC", nativeQuery = true)
+	@Query(value = "SELECT * FROM myplant mp WHERE mp.iduser = :idUser ORDER BY mp.growndate DESC, mp.name ASC", nativeQuery = true)
 	List<MyPlant> getAllMyPlantByUser(@Param("idUser") int idUser);
 	
-	@Query(value = "SELECT * FROM myplant mp WHERE mp.iduser = :idUser AND mp.name LIKE CONCAT('%',:key,'%') ORDER BY mp.growndate DESC", nativeQuery = true)
+	@Query(value = "SELECT * FROM myplant mp WHERE mp.iduser = :idUser AND mp.name LIKE CONCAT('%',:key,'%') ORDER BY mp.growndate DESC, mp.name ASC", nativeQuery = true)
 	List<MyPlant> getAllMyPlantByUserAndKey(@Param("idUser") int idUser, @Param("key") String key);
 	
 	@Query(value = "SELECT * FROM myplant mp WHERE mp.iduser = :idUser AND mp.id = :id", nativeQuery = true)

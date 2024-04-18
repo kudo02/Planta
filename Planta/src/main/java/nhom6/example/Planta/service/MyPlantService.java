@@ -2,6 +2,7 @@ package nhom6.example.Planta.service;
 
 import java.util.List;
 
+import nhom6.example.Planta.entity.MyPlant;
 import nhom6.example.Planta.payload.request.MyPlantRequest;
 import nhom6.example.Planta.payload.response.CareScheduleResponse;
 import nhom6.example.Planta.payload.response.MyPlantResponse;

@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,6 +26,30 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
+	@GetMapping("/{id}")
+	public ApiResponse<UserResponse> getUser(@PathVariable("id") int id){
+		UserResponse userResponse = userService.getUserById(id);
+		System.out.println(userResponse);
+		ApiResponse<UserResponse> apiResponse;
+		if(userResponse != null) {
+			apiResponse = ApiResponse.<UserResponse>builder()
+					.success(true)
+					.code(200)
+					.message("Lấy thông tin thành công!")
+					.result(userResponse)
+					.build();
+		}
+		else {
+			apiResponse = ApiResponse.<UserResponse>builder()
+					.success(false)
+					.code(200)
+					.message("Lấy thông tin thất bại!")
+					.result(null)
+					.build();
+		}
+		return apiResponse;
+	}
+	
 	@PostMapping("/login")
 	public ApiResponse<UserResponse> login(@RequestBody User user){
 		UserResponse userResponse = userService.login(user);
@@ -33,7 +58,7 @@ public class UserController {
 			apiResponse = ApiResponse.<UserResponse>builder()
 					.success(true)
 					.code(200)
-					.message("Login success!")
+					.message("Đăng nhập thành công!")
 					.result(userResponse)
 					.build();
 		}
@@ -41,7 +66,7 @@ public class UserController {
 			apiResponse = ApiResponse.<UserResponse>builder()
 					.success(false)
 					.code(200)
-					.message("Username or password wrong!")
+					.message("Sai tài khoản và mật khẩu!")
 					.result(null)
 					.build();
 		}
@@ -49,23 +74,36 @@ public class UserController {
 	}
 	
 	@PostMapping("/register")
-	public ApiResponse<UserResponse> register(@RequestBody User user){
-		int check = userService.register(user);
+	public ApiResponse<UserResponse> register(@RequestBody User userRequest){
+		System.out.println("User request: "+userRequest);
+		User user = userService.getUserByUsername(userRequest.getUsername());
 		ApiResponse<UserResponse> apiResponse;
-		if(check > 0) {
-			UserResponse userResponse = new UserResponse(user.getId(), user.getName(),user.getPhone(),user.getAddress(),user.getEmail(),user.getToken());
-			apiResponse = ApiResponse.<UserResponse>builder()
-					.success(true)
-					.code(200)
-					.message("Register success!")
-					.result(userResponse)
-					.build();
+		if(user == null) {
+			int check = userService.register(userRequest);
+			if(check > 0) {
+				User newUser = userService.getUserByUsername(userRequest.getUsername());
+				UserResponse userResponse = new UserResponse(newUser.getId(), newUser.getName(),newUser.getPhone(),newUser.getAddress(),newUser.getEmail(),newUser.getToken());
+				apiResponse = ApiResponse.<UserResponse>builder()
+						.success(true)
+						.code(200)
+						.message("Đăng ký tài khoản thành công!")
+						.result(userResponse)
+						.build();
+			} else {
+				UserResponse userResponse = new UserResponse(userRequest.getId(), userRequest.getName(),userRequest.getPhone(),userRequest.getAddress(),userRequest.getEmail(),userRequest.getToken());
+				apiResponse = ApiResponse.<UserResponse>builder()
+						.success(false)
+						.code(404)
+						.message("Đăng ký tài khoản thất bại!")
+						.result(userResponse)
+						.build();
+			}
 		}
 		else{
 			apiResponse = ApiResponse.<UserResponse>builder()
 					.success(false)
 					.code(404)
-					.message("Account exist!")
+					.message("Tài khoản đã tồn tại!")
 					.result(null)
 					.build();
 		}
@@ -74,24 +112,35 @@ public class UserController {
 	}
 	
 	@PutMapping("/update/information")
-	public ApiResponse<UserResponse> updateInformation(@RequestBody User user){
-		int check = userService.updateUser(user);
+	public ApiResponse<UserResponse> updateInformation(@RequestBody UserResponse userRequest){
+		
 		ApiResponse<UserResponse> apiResponse;
-		if(check > 0) {
-			UserResponse userResponse = new UserResponse(user.getId(), user.getName(),user.getPhone(),user.getAddress(),user.getEmail(),user.getToken());
-			apiResponse = ApiResponse.<UserResponse>builder()
-					.success(true)
-					.code(200)
-					.message("Update information success!")
-					.result(userResponse)
-					.build();
+		if(userService.getUserByEmail(userRequest.getEmail(), userRequest.getId()) == null) {
+			int check = userService.updateUser(userRequest);
+			if(check > 0) {
+				UserResponse newUserResponse = new UserResponse(userRequest.getId(), userRequest.getName(),userRequest.getPhone(),userRequest.getAddress(),userRequest.getEmail(),userRequest.getToken());
+				apiResponse = ApiResponse.<UserResponse>builder()
+						.success(true)
+						.code(200)
+						.message("Cập nhật thông tin thành công!")
+						.result(newUserResponse)
+						.build();
+			}
+			else{
+				apiResponse = ApiResponse.<UserResponse>builder()
+						.success(false)
+						.code(404)
+						.message("Cập nhật thông tin thất bại!")
+						.result(userRequest)
+						.build();
+			}
 		}
 		else{
 			apiResponse = ApiResponse.<UserResponse>builder()
 					.success(false)
 					.code(404)
-					.message("Update information fail!")
-					.result(null)
+					.message("Email người dùng đã được sử dụng!")
+					.result(userRequest)
 					.build();
 		}
 		
@@ -107,7 +156,7 @@ public class UserController {
 			apiResponse = ApiResponse.<UserResponse>builder()
 					.success(true)
 					.code(200)
-					.message("Update password success!")
+					.message("Cập nhật mật khẩu thành công!")
 					.result(userResponse)
 					.build();
 		}
@@ -115,19 +164,11 @@ public class UserController {
 			apiResponse = ApiResponse.<UserResponse>builder()
 					.success(false)
 					.code(404)
-					.message("Update password fail!")
+					.message("Cập nhật mật khẩu thất bại!")
 					.result(null)
 					.build();
 		}
 		
 		return apiResponse;
 	}
-	
-	@PatchMapping("/{id}")
-    public User updateProductFields(@PathVariable int id,@RequestBody Map<String, Object> fields){
-//		Gson gson = new Gson(); //String json
-//        Type type = new TypeToken<Map<String, Object>>(){}.getType();
-//        Map<String, Object> fields = gson.fromJson(json, type);
-        return userService.updateUserByFields(id,fields);
-    }
 }

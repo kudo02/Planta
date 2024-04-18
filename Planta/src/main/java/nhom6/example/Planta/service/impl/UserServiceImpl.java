@@ -26,8 +26,27 @@ public class UserServiceImpl implements UserService{
 		return userResponse;
 	}
 	
+	@Override
+	public UserResponse getUserById(int idUser) {
+		User user = userRepository.getUserById(idUser);
+		UserResponse userResponse = new UserResponse(user.getId(), user.getName(),user.getPhone(),user.getAddress(),user.getEmail(),user.getToken());
+		return userResponse;
+	}
+	
+	@Override
+	public User getUserByEmail(String email, int idUser) {
+		User user = userRepository.getUserByEmail(email, idUser);
+		return user;
+	}
+	
+	@Override
+	public User getUserByUsername(String username) {
+		User user = userRepository.findByUsername(username);
+		return user;
+	}
+	
 	public UserResponse login(User userRequest) {
-		User user = userRepository.findByUsernameAndPassword(userRequest.getUsername(), userRequest.getPassword());
+		User user = userRepository.getUserByUsernameOrEmail(userRequest.getUsername(), userRequest.getUsername(), userRequest.getPassword());
 		UserResponse userResponse = new UserResponse(user.getId(), user.getName(),user.getPhone(),user.getAddress(),user.getEmail(),user.getToken());
 		return userResponse;
 	}
@@ -41,7 +60,7 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public int updateUser(User userRequest) {
+	public int updateUser(UserResponse userRequest) {
 		return userRepository.update(userRequest.getAddress(), userRequest.getEmail(), userRequest.getName(), userRequest.getPhone(), userRequest.getId());
 	}
 

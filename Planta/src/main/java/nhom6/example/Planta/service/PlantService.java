@@ -11,5 +11,7 @@ public interface PlantService {
 	
 	public List<PlantResponse> getListPlants();
 	
+	public List<PlantResponse> getPlantsByName(String key);
+	
 	public List<PlantResponse> getAllPlants(int page, int limit);
 }

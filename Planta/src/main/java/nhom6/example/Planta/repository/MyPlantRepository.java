@@ -16,8 +16,11 @@ import nhom6.example.Planta.entity.MyPlant;
 @Repository
 public interface MyPlantRepository extends JpaRepository<MyPlant, Integer>{
 	
-	@Query(value = "SELECT * FROM myplant mp WHERE mp.iduser = :idUser", nativeQuery = true)
+	@Query(value = "SELECT * FROM myplant mp WHERE mp.iduser = :idUser ORDER BY mp.growndate DESC", nativeQuery = true)
 	List<MyPlant> getAllMyPlantByUser(@Param("idUser") int idUser);
+	
+	@Query(value = "SELECT * FROM myplant mp WHERE mp.iduser = :idUser AND mp.name LIKE CONCAT('%',:key,'%') ORDER BY mp.growndate DESC", nativeQuery = true)
+	List<MyPlant> getAllMyPlantByUserAndKey(@Param("idUser") int idUser, @Param("key") String key);
 	
 	@Query(value = "SELECT * FROM myplant mp WHERE mp.iduser = :idUser AND mp.id = :id", nativeQuery = true)
 	MyPlant getMyPlantByUser(@Param("idUser") int idUser, @Param("id") int id);
@@ -28,6 +31,12 @@ public interface MyPlantRepository extends JpaRepository<MyPlant, Integer>{
 	@Query("SELECT mp FROM MyPlant mp JOIN mp.user u WHERE u.id = :userId")
 	Optional<List<MyPlant>> getAllMyPlantByUserId(@Param("userId") int userId);
 
+	@Query(value = "SELECT * FROM myplant mp WHERE mp.iduser = :idUser AND mp.name = :name", nativeQuery = true)
+	MyPlant getMyPlantByUserAndName(@Param("idUser") int idUser, @Param("name") String name);
+	
+	@Query(value = "SELECT * FROM myplant mp WHERE mp.iduser = :idUser AND mp.name = :name AND mp.id != :idMyPlant", nativeQuery = true)
+	MyPlant getMyPlantByUserAndNameNotId(@Param("idUser") int idUser, @Param("name") String name, @Param("idMyPlant") int idMyPlant);
+	
 	@Modifying
 	@Transactional
 	@Query(value = "INSERT INTO myplant(growndate,image,kindoflight,name,idplant,iduser) VALUE (:growndate, :image, :kindoflight, :name, :idplant, :iduser)", nativeQuery = true)

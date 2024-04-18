@@ -60,19 +60,49 @@ public class MyPlantServiceImpl implements MyPlantService {
 	}
 	
 	@Override
+	public List<MyPlantResponse> getAllMyPlantByUserAndKey(int id, String key) {
+		List<MyPlant> myPlants = myPlantRepository.getAllMyPlantByUserAndKey(id, key);
+
+		List<MyPlantResponse> myPlantResponses = new ArrayList<>();
+		for(MyPlant myPlant : myPlants) {
+			PlantResponseOfMyPlant plantResponseOfMyPlant = new PlantResponseOfMyPlant();
+			plantResponseOfMyPlant.setId(myPlant.getPlant().getId());
+			plantResponseOfMyPlant.setName(myPlant.getPlant().getName());
+			plantResponseOfMyPlant.setTypePlant(myPlant.getPlant().getTypePlant());
+			plantResponseOfMyPlant.setMainImage(myPlant.getPlant().getMainImage());
+			plantResponseOfMyPlant.setSecondaryImage(myPlant.getPlant().getSecondaryImage());
+			plantResponseOfMyPlant.setSecondaryImage(myPlant.getPlant().getTypeSoil());
+			plantResponseOfMyPlant.setSecondaryImage(myPlant.getPlant().getMatureSize());
+			plantResponseOfMyPlant.setSecondaryImage(myPlant.getPlant().getMatureTime());
+			plantResponseOfMyPlant.setSecondaryImage(myPlant.getPlant().getDescription());
+			
+			MyPlantResponse myPlantResponse = new MyPlantResponse();
+			myPlantResponse.setId(myPlant.getId());
+			myPlantResponse.setName(myPlant.getName());
+			myPlantResponse.setGrownDate(myPlant.getGrownDate());
+			myPlantResponse.setKindOfLight(myPlant.getKindOfLight());
+			myPlantResponse.setImage(myPlant.getImage());
+			myPlantResponse.setPlantResponseOfMyPlant(plantResponseOfMyPlant);
+			
+			myPlantResponses.add(myPlantResponse);
+		}
+		return myPlantResponses;
+	}
+	
+	@Override
 	public MyPlantResponse getMyPlantByUser(int idUser, int idMyPlant) {
 		MyPlant myPlant = myPlantRepository.getMyPlantByUser(idUser, idMyPlant);
-		
+
 		PlantResponseOfMyPlant plantResponseOfMyPlant = new PlantResponseOfMyPlant();
 		plantResponseOfMyPlant.setId(myPlant.getPlant().getId());
 		plantResponseOfMyPlant.setName(myPlant.getPlant().getName());
 		plantResponseOfMyPlant.setTypePlant(myPlant.getPlant().getTypePlant());
 		plantResponseOfMyPlant.setMainImage(myPlant.getPlant().getMainImage());
 		plantResponseOfMyPlant.setSecondaryImage(myPlant.getPlant().getSecondaryImage());
-		plantResponseOfMyPlant.setSecondaryImage(myPlant.getPlant().getTypeSoil());
-		plantResponseOfMyPlant.setSecondaryImage(myPlant.getPlant().getMatureSize());
-		plantResponseOfMyPlant.setSecondaryImage(myPlant.getPlant().getMatureTime());
-		plantResponseOfMyPlant.setSecondaryImage(myPlant.getPlant().getDescription());
+		plantResponseOfMyPlant.setTypeSoil(myPlant.getPlant().getTypeSoil());
+		plantResponseOfMyPlant.setMatureSize(myPlant.getPlant().getMatureSize());
+		plantResponseOfMyPlant.setMatureTime(myPlant.getPlant().getMatureTime());
+		plantResponseOfMyPlant.setDescription(myPlant.getPlant().getDescription());
 		
 		MyPlantResponse myPlantResponse = new MyPlantResponse();
 		myPlantResponse.setId(myPlant.getId());
@@ -83,6 +113,18 @@ public class MyPlantServiceImpl implements MyPlantService {
 		myPlantResponse.setPlantResponseOfMyPlant(plantResponseOfMyPlant);
 		
 		return myPlantResponse;
+	}
+	
+	@Override
+	public MyPlant getMyPlantByUserAndName(int idUser, String name) {
+		MyPlant myPlant = myPlantRepository.getMyPlantByUserAndName(idUser, name);
+		return myPlant;
+	}
+	
+	@Override
+	public MyPlant getMyPlantByUserAndNameNotId(int idUser, String name, int idMyPlant) {
+		MyPlant myPlant = myPlantRepository.getMyPlantByUserAndNameNotId(idUser, name, idMyPlant);
+		return myPlant;
 	}
 
 	@Override
@@ -224,5 +266,4 @@ public class MyPlantServiceImpl implements MyPlantService {
 		}
 		return myPlantResponses;
 	}
-	
 }

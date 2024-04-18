@@ -40,6 +40,12 @@ public class PlantServiceImpl implements PlantService {
         return allPlants;
     }
 	
+	@Override
+	public List<PlantResponse> getPlantsByName(String key) {
+		List<PlantResponse> plantResponses = plantRepository.findPlantByName(key);
+		return plantResponses;
+	}
+	
 	public List<PlantResponse> getAllPlants(int page, int limit) {
         PageRequest pageRequest = PageRequest.of(page, limit);
         Page<PlantResponse> plantsPage = plantRepository.findAllProjected(pageRequest);

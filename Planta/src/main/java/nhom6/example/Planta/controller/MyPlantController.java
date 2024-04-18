@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import nhom6.example.Planta.entity.MyPlant;
@@ -32,6 +33,29 @@ public class MyPlantController {
 	@GetMapping("/{id}/all")
 	public ApiResponse<List<MyPlantResponse>> getAllMyPlantByUser(@PathVariable("id") int id){
 		List<MyPlantResponse> myPlantResponses = myPlantService.getAllMyPlantByUser(id);
+		ApiResponse<List<MyPlantResponse>> apiResponse;
+		if(myPlantResponses != null) {
+			apiResponse = ApiResponse.<List<MyPlantResponse>>builder()
+					.success(true)
+					.code(200)
+					.message("success")
+					.result(myPlantResponses)
+					.build();
+		}
+		else {
+			apiResponse = ApiResponse.<List<MyPlantResponse>>builder()
+					.success(false)
+					.code(404)
+					.message("fail")
+					.result(null)
+					.build();
+		}
+		return apiResponse;
+	}
+	
+	@GetMapping("/{id}/search")
+	public ApiResponse<List<MyPlantResponse>> getAllMyPlantByUserAndKey(@PathVariable("id") int id, @RequestParam("key") String key){
+		List<MyPlantResponse> myPlantResponses = myPlantService.getAllMyPlantByUserAndKey(id, key);
 		ApiResponse<List<MyPlantResponse>> apiResponse;
 		if(myPlantResponses != null) {
 			apiResponse = ApiResponse.<List<MyPlantResponse>>builder()
@@ -77,49 +101,68 @@ public class MyPlantController {
 	
 	@PostMapping("/{idUser}/add")
 	public ApiResponse<MyPlantRequest> addMyPlant(@PathVariable("idUser") int idUser, @RequestBody MyPlantRequest myPlantRequest){
-		System.out.println(myPlantRequest);
-		boolean check = myPlantService.addMyPlant(idUser, myPlantRequest);
 		
+		MyPlant myPlant = myPlantService.getMyPlantByUserAndName(idUser, myPlantRequest.getName());
 		ApiResponse<MyPlantRequest> apiResponse;
-		if(check) {
-			MyPlantRequest myPlantResponse = myPlantService.getLastMyPlantByUser(idUser);
-			apiResponse = ApiResponse.<MyPlantRequest>builder()
-					.success(true)
-					.code(200)
-					.message("Add my plant success!")
-					.result(myPlantResponse)
-					.build();
+		if(myPlant == null) {
+			boolean check = myPlantService.addMyPlant(idUser, myPlantRequest);
+			
+			if(check) {
+				MyPlantRequest myPlantResponse = myPlantService.getLastMyPlantByUser(idUser);
+				apiResponse = ApiResponse.<MyPlantRequest>builder()
+						.success(true)
+						.code(200)
+						.message("Thêm cây trồng thành công!")
+						.result(myPlantResponse)
+						.build();
+			} else {
+				apiResponse = ApiResponse.<MyPlantRequest>builder()
+						.success(false)
+						.code(404)
+						.message("Thêm cây trồng thất bại!")
+						.result(myPlantRequest)
+						.build();
+			}
 		}
 		else {
 			apiResponse = ApiResponse.<MyPlantRequest>builder()
 					.success(false)
 					.code(404)
-					.message("Add my plant fail!")
+					.message("Cây trồng đã tồn tại!")
 					.result(myPlantRequest)
 					.build();
 		}
 		return apiResponse;
 	}
 	
-	@PutMapping("/update/{id}")
-	public ApiResponse<Boolean> updateMyPlant(@PathVariable("id") Integer id, @RequestBody MyPlantRequest myPlantRequest){
-		System.out.println(myPlantRequest);
-		boolean check = myPlantService.updateMyPlant(id, myPlantRequest);
+	@PutMapping("/{idUser}/update/{idMyPlant}")
+	public ApiResponse<Boolean> updateMyPlant(@PathVariable("idUser") Integer idUser, @PathVariable("idMyPlant") Integer idMyPlant, @RequestBody MyPlantRequest myPlantRequest){
+		MyPlant myPlant = myPlantService.getMyPlantByUserAndNameNotId(idUser, myPlantRequest.getName(), idMyPlant);
 		ApiResponse<Boolean> apiResponse;
-		if(check) {
-			apiResponse = ApiResponse.<Boolean>builder()
-					.success(true)
-					.code(200)
-					.message("Update my plant success!")
-					.result(check)
-					.build();
+		if(myPlant == null) {
+			boolean check = myPlantService.updateMyPlant(idMyPlant, myPlantRequest);
+			if(check) {
+				apiResponse = ApiResponse.<Boolean>builder()
+						.success(true)
+						.code(200)
+						.message("Cập nhật cây trồng thành công!")
+						.result(check)
+						.build();
+			} else {
+				apiResponse = ApiResponse.<Boolean>builder()
+						.success(false)
+						.code(404)
+						.message("Cập nhật cây trồng thất bại!")
+						.result(check)
+						.build();
+			}
 		}
 		else {
 			apiResponse = ApiResponse.<Boolean>builder()
 					.success(false)
 					.code(404)
-					.message("Update my plant fail!")
-					.result(check)
+					.message("Tên cây trồng đã tồn tại!")
+					.result(null)
 					.build();
 		}
 		return apiResponse;
@@ -133,7 +176,7 @@ public class MyPlantController {
 			apiResponse = ApiResponse.<Boolean>builder()
 					.success(true)
 					.code(200)
-					.message("Delete my plant success!")
+					.message("Xóa cây trồng thành công!")
 					.result(check)
 					.build();
 		}
@@ -141,7 +184,7 @@ public class MyPlantController {
 			apiResponse = ApiResponse.<Boolean>builder()
 					.success(false)
 					.code(404)
-					.message("Delete my plant fail!")
+					.message("Xóa cây trồng thất bại!")
 					.result(check)
 					.build();
 		}

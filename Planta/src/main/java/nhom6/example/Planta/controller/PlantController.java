@@ -36,6 +36,28 @@ public class PlantController {
 		return apiResponse;
 	}
 	
+	@GetMapping("search")
+	public ApiResponse<List<PlantResponse>> getPlantByName(@RequestParam("key") String key){
+		List<PlantResponse> plants = plantService.getPlantsByName(key);
+		ApiResponse<List<PlantResponse>> apiResponse;
+		if(plants != null) {
+			apiResponse = ApiResponse.<List<PlantResponse>>builder()
+					.success(true)
+					.code(200)
+					.message("Lấy được danh sách cây trồng!")
+					.result(plants)
+					.build();
+		} else {
+			apiResponse = ApiResponse.<List<PlantResponse>>builder()
+					.success(false)
+					.code(404)
+					.message("Không có cây trồng nào phù hợp!")
+					.result(null)
+					.build();
+		}
+		return apiResponse;
+	}
+	
 	
 	@GetMapping("{id}")
 	public ApiResponse<Plant> getPlantDetail(@PathVariable int id){

@@ -7,8 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import nhom6.example.Planta.payload.response.MyPlantResponse;
-import nhom6.example.Planta.payload.response.PlantResponseOfMyPlant;
 
 @Data
 @Builder
